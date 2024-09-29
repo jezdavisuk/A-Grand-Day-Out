@@ -14,6 +14,16 @@ public class InputParser {
         return validatedInstructions;
     }
 
+    public void parseInstruction(String input) {
+
+        List<String> inputList = new LinkedList<>(Arrays.asList(input.split("")));
+
+        inputList.stream()
+                .filter(InputParser::validateInstructions)
+                .map(String::toUpperCase)
+                .forEach(this::queueInstructions);
+    }
+
     private static boolean validateInstructions(String input) {
 
         Predicate<String> isValid = string -> {
