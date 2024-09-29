@@ -14,6 +14,15 @@ public class InputParser {
         return validatedInstructions;
     }
 
+    private static boolean validateInstructions(String input) {
 
+        Predicate<String> isValid = string -> {
+            Pattern pattern = Pattern.compile("[LRM]+", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(string);
+            return matcher.matches();
+        };
+
+        return isValid.test(input);
+    }
 
 }
