@@ -14,8 +14,8 @@ class InputParserTest {
     private static int count = 0;
 
     @Test
-    @DisplayName("When passed a single valid instruction of type String, returns matching element of class Instruction.")
-    void testParsesSingleValidInstruction() {
+    @DisplayName("When passed a single valid upper-case instruction of type String, returns matching element of class Instruction.")
+    void testParsesSingleValidUppercaseInstruction() {
 
         //Arrange
         inputParser = new InputParser();
@@ -28,6 +28,34 @@ class InputParserTest {
         inputParser.parseInstruction("L");
         inputParser.parseInstruction("R");
         inputParser.parseInstruction("M");
+
+        Instruction actualLeft = inputParser.getValidatedInstructions().poll();
+        Instruction actualRight = inputParser.getValidatedInstructions().poll();
+        Instruction actualMove = inputParser.getValidatedInstructions().poll();
+
+        // Assert
+        assertAll(
+                () -> assertEquals(expectedLeft, actualLeft),
+                () -> assertEquals(expectedRight, actualRight),
+                () -> assertEquals(expectedMove, actualMove)
+        );
+    }
+
+    @Test
+    @DisplayName("When passed a single valid lower-case instruction of type String, returns matching element of class Instruction.")
+    void testParsesSingleValidLowercaseInstruction() {
+
+        //Arrange
+        inputParser = new InputParser();
+
+        Instruction expectedLeft = Instruction.L;
+        Instruction expectedRight = Instruction.R;
+        Instruction expectedMove = Instruction.M;
+
+        //Act
+        inputParser.parseInstruction("l");
+        inputParser.parseInstruction("r");
+        inputParser.parseInstruction("m");
 
         Instruction actualLeft = inputParser.getValidatedInstructions().poll();
         Instruction actualRight = inputParser.getValidatedInstructions().poll();
@@ -57,6 +85,7 @@ class InputParserTest {
         List<Instruction> actualThirdLog = new ArrayList<>();
 
         //Act
+        count = 0;
         inputParser.parseInstruction("LRM");
         while (count < 3) actualFirstLog.add(getInstruction());
         inputParser.parseInstruction("MLLR");
@@ -88,6 +117,7 @@ class InputParserTest {
         List<Instruction> actualThirdLog = new ArrayList<>();
 
         //Act
+        count = 0;
         inputParser.parseInstruction("LP? RM");
         while (count < 3) actualFirstLog.add(getInstruction());
         inputParser.parseInstruction(" _M$$LL#R");
