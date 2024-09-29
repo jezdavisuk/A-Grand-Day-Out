@@ -25,4 +25,11 @@ public class InputParser {
         return isValid.test(input);
     }
 
+    private void queueInstructions(String input) {
+
+        Consumer<String> queueInstruction = string -> validatedInstructions.add(Instruction.valueOf(string));
+
+        queueInstruction.accept(input);
+    }
+
 }
