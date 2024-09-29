@@ -3,9 +3,6 @@ package input;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class InputParserTest {
@@ -17,14 +14,18 @@ class InputParserTest {
         //Arrange
         InputParser inputParser = new InputParser();
 
-        ArrayList<Instruction> expectedLeft = new ArrayList<>(List.of(Instruction.L));
-        ArrayList<Instruction> expectedRight = new ArrayList<>(List.of(Instruction.R));
-        ArrayList<Instruction> expectedMove = new ArrayList<>(List.of(Instruction.M));
+        Instruction expectedLeft = Instruction.L;
+        Instruction expectedRight = Instruction.R;
+        Instruction expectedMove = Instruction.M;
 
         //Act
-        ArrayList<Instruction> actualLeft = inputParser.parseInstruction("L");
-        ArrayList<Instruction> actualRight = inputParser.parseInstruction("R");
-        ArrayList<Instruction> actualMove = inputParser.parseInstruction("M");
+        inputParser.parseInstruction("L");
+        inputParser.parseInstruction("R");
+        inputParser.parseInstruction("M");
+
+        Instruction actualLeft = inputParser.getValidatedInstructions().poll();
+        Instruction actualRight = inputParser.getValidatedInstructions().poll();
+        Instruction actualMove = inputParser.getValidatedInstructions().poll();
 
         // Assert
         assertAll(
