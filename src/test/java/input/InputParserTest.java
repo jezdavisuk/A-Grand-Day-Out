@@ -14,7 +14,7 @@ class InputParserTest {
     private static int count = 0;
 
     @Test
-    @DisplayName("When passed a single valid instruction of type String, returns Instruction to match user input.")
+    @DisplayName("When passed a single valid instruction of type String, returns matching element of class Instruction.")
     void testParsesSingleValidInstruction() {
 
         //Arrange
@@ -42,7 +42,7 @@ class InputParserTest {
     }
 
     @Test
-    @DisplayName("When passed multiple consecutive valid instructions of type String, returns matching elements of class Instruction.")
+    @DisplayName("When passed Strings retaining multiple consecutive valid instructions, returns matching elements of class Instruction and in the correct order.")
     void testParsesMultipleValidInstructions() {
 
         //Arrange
@@ -62,6 +62,37 @@ class InputParserTest {
         inputParser.parseInstruction("MLLR");
         while (count < 7) actualSecondLog.add(getInstruction());
         inputParser.parseInstruction("RRMLLLM");
+        while (count < 14) actualThirdLog.add(getInstruction());
+
+        // Assert
+        assertAll(
+                () -> assertEquals(expectedFirstLog, actualFirstLog),
+                () -> assertEquals(expectedSecondLog, actualSecondLog),
+                () -> assertEquals(expectedThirdLog, actualThirdLog)
+        );
+    }
+
+    @Test
+    @DisplayName("When passed Strings retaining a mixture of valid and invalid instructions, correctly filters out invalid input and returns only the valid matching elements of class Instruction and in the order in which they were given.")
+    void testParsesMixedValidAndInvalidInstructions() {
+
+        //Arrange
+        inputParser = new InputParser();
+
+        List<Instruction> expectedFirstLog = List.of(Instruction.L,Instruction.R,Instruction.M);
+        List<Instruction> expectedSecondLog = List.of(Instruction.M,Instruction.L,Instruction.L,Instruction.R);
+        List<Instruction> expectedThirdLog = List.of(Instruction.R,Instruction.R,Instruction.M,Instruction.L,Instruction.L,Instruction.L,Instruction.M);
+
+        List<Instruction> actualFirstLog = new ArrayList<>();
+        List<Instruction> actualSecondLog = new ArrayList<>();
+        List<Instruction> actualThirdLog = new ArrayList<>();
+
+        //Act
+        inputParser.parseInstruction("LP? RM");
+        while (count < 3) actualFirstLog.add(getInstruction());
+        inputParser.parseInstruction(" _M$$LL#R");
+        while (count < 7) actualSecondLog.add(getInstruction());
+        inputParser.parseInstruction("9RR(ML[]LL@M");
         while (count < 14) actualThirdLog.add(getInstruction());
 
         // Assert
